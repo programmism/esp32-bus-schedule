@@ -8,38 +8,38 @@
 
 extern WiFiManager wifiManager;
 
-// Callback функция, вызываемая при запуске портала настройки
+// Callback function called when configuration portal starts
 void configModeCallback(WiFiManager *myWiFiManager) {
-  // Отображаем инструкции на экране
+  // Display instructions on screen
   displaySetupPortal();
 }
 
-// Функция подключения к WiFi с автоматическим переподключением через WiFiManager
+// Function to connect to WiFi with automatic reconnection via WiFiManager
 void connectToWiFi() {
   if (WiFi.status() == WL_CONNECTED) {
-    return; // Уже подключено
+    return; // Already connected
   }
 
-  // Настройка WiFiManager
+  // Configure WiFiManager
   wifiManager.setConfigPortalTimeout(CONFIG_PORTAL_TIMEOUT);
   wifiManager.setAPStaticIPConfig(IPAddress(192,168,4,1), IPAddress(192,168,4,1), IPAddress(255,255,255,0));
   
-  // Устанавливаем callback для отображения инструкций при запуске портала
+  // Set callback to display instructions when portal starts
   wifiManager.setAPCallback(configModeCallback);
   
-  // Отображаем информацию о попытке подключения
+  // Display connection attempt information
   displayWiFiConnecting();
   
-  // Пытаемся подключиться к сохраненной сети
-  // Если не получается, запускается captive portal (и вызывается callback)
+  // Try to connect to saved network
+  // If it fails, captive portal starts (and callback is called)
   if (!wifiManager.autoConnect(AP_SSID)) {
-    // Если не удалось подключиться и таймаут истек
+    // If connection failed and timeout expired
     displayWiFiError();
     delay(3000);
     ESP.restart();
   }
 
-  // Успешное подключение
+  // Successful connection
   displayWiFiConnected();
   delay(2000);
 }

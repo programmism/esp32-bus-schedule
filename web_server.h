@@ -15,7 +15,7 @@ void handleRoot();
 void handleReset();
 void handleConfig();
 
-// Главная страница с информацией
+// Main page with information
 void handleRoot() {
   String html = R"(
 <!DOCTYPE html>
@@ -72,7 +72,7 @@ void handleRoot() {
   server.send(200, "text/html", html);
 }
 
-// Страница настройки WiFi (запуск portal)
+// WiFi configuration page (start portal)
 void handleConfig() {
   String html = R"(
 <!DOCTYPE html>
@@ -100,7 +100,7 @@ void handleConfig() {
     <form action="/reset" method="POST">
       <button type="submit" style="width: 100%; padding: 12px; background: #ff9800; color: #000; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold;">Start WiFi Setup</button>
     </form>
-    <a href="/">← Back to main page</a>
+    <a href="/">&larr; Back to main page</a>
   </div>
 </body>
 </html>
@@ -108,9 +108,9 @@ void handleConfig() {
   server.send(200, "text/html", html);
 }
 
-// Обработчик сброса WiFi настроек
+// WiFi settings reset handler
 void handleReset() {
-  // Сбрасываем настройки WiFiManager
+  // Reset WiFiManager settings
   wifiManager.resetSettings();
   
   String html = R"(
@@ -143,7 +143,7 @@ void handleReset() {
   ESP.restart();
 }
 
-// Инициализация веб-сервера
+// Initialize web server
 void initWebServer() {
   server.on("/", handleRoot);
   server.on("/reset", handleReset);

@@ -6,7 +6,7 @@
 #include <ArduinoJson.h>
 #include "config.h"
 
-// Функция запроса расписания с сервера
+// Function to request schedule from server
 String updateSchedule() {
   if (WiFi.status() != WL_CONNECTED) {
     return "No WiFi connection";
@@ -14,28 +14,28 @@ String updateSchedule() {
 
   HTTPClient http;
   http.begin(SCHEDULE_SERVER_URL);
-  http.setTimeout(5000); // Таймаут 5 секунд
+  http.setTimeout(5000); // Timeout 5 seconds
 
   int httpResponseCode = http.GET();
 
   if (httpResponseCode > 0) {
     String payload = http.getString();
     
-    // Попытка парсинга JSON (если сервер возвращает JSON)
-    // Если формат другой, можно изменить логику парсинга
+    // Attempt JSON parsing (if server returns JSON)
+    // If format is different, parsing logic can be changed
     DynamicJsonDocument doc(2048);
     DeserializationError error = deserializeJson(doc, payload);
 
     if (!error) {
-      // Если JSON успешно распарсен, формируем строку для отображения
+      // If JSON successfully parsed, form string for display
       String scheduleData = "";
       
-      // Пример для JSON формата: {"buses": [{"number": "123", "time": "10:30"}, ...]}
+      // Example for JSON format: {"buses": [{"number": "123", "time": "10:30"}, ...]}
       if (doc.containsKey("buses") && doc["buses"].is<JsonArray>()) {
         JsonArray buses = doc["buses"];
         int count = 0;
         for (JsonObject bus : buses) {
-          if (count >= 5) break; // Ограничиваем до 5 автобусов
+          if (count >= 5) break; // Limit to 5 buses
           if (bus.containsKey("number") && bus.containsKey("time")) {
             scheduleData += bus["number"].as<String>();
             scheduleData += " -> ";
@@ -48,14 +48,14 @@ String updateSchedule() {
           scheduleData = "No buses scheduled";
         }
       } else {
-        // Если формат другой, просто выводим первые 200 символов
+        // If format is different, just output first 200 characters
         scheduleData = payload.substring(0, 200);
       }
       
       http.end();
       return scheduleData;
     } else {
-      // Если не JSON, выводим как есть (первые 200 символов)
+      // If not JSON, output as is (first 200 characters)
       http.end();
       return payload.substring(0, 200);
     }

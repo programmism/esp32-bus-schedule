@@ -8,23 +8,23 @@
 
 extern Adafruit_ST7789 lcd;
 
-// Инициализация дисплея
+// Initialize display
 void initDisplay() {
-  lcd.init(135, 240); // Инициализация: высота 135, ширина 240 (вертикальная по умолчанию)
-  lcd.setRotation(DISPLAY_ROTATION); // Поворот на 90° для горизонтальной ориентации (240x135)
+  lcd.init(135, 240); // Initialize: height 135, width 240 (vertical by default)
+  lcd.setRotation(DISPLAY_ROTATION); // Rotate 90° for horizontal orientation (240x135)
   lcd.fillScreen(ST77XX_BLACK);
 }
 
-// Отображение расписания на экране
+// Display schedule on screen
 void displaySchedule(String scheduleData, unsigned long currentMillis, unsigned long lastScheduleUpdate) {
-  // Отображение расписания на экране
+  // Display schedule on screen
   lcd.fillScreen(ST77XX_BLACK);
   lcd.setTextSize(1);
   lcd.setTextColor(ST77XX_YELLOW);
   lcd.setCursor(0, 0);
   lcd.print("Bus Schedule:");
   
-  // Выводим расписание построчно
+  // Output schedule line by line
   lcd.setTextColor(ST77XX_WHITE);
   int yPos = 12;
   int lineStart = 0;
@@ -33,19 +33,19 @@ void displaySchedule(String scheduleData, unsigned long currentMillis, unsigned 
     if (i == scheduleData.length() || scheduleData.charAt(i) == '\n') {
       if (i > lineStart) {
         String line = scheduleData.substring(lineStart, i);
-        // Обрезаем строку если она слишком длинная (для ширины 240px можно больше символов)
+        // Truncate line if too long (for 240px width can fit more characters)
         if (line.length() > 30) {
           line = line.substring(0, 27) + "...";
         }
         lcd.setCursor(0, yPos);
         lcd.print(line);
-        yPos += 10; // Уменьшенный межстрочный интервал
+        yPos += 10; // Reduced line spacing
       }
       lineStart = i + 1;
     }
   }
   
-  // Показываем статус WiFi и IP адрес внизу экрана
+  // Show WiFi status and IP address at bottom of screen
   lcd.setTextSize(1);
   lcd.setCursor(0, 125);
   if (WiFi.status() == WL_CONNECTED) {
@@ -56,7 +56,7 @@ void displaySchedule(String scheduleData, unsigned long currentMillis, unsigned 
   } else {
     lcd.setTextColor(ST77XX_RED);
     lcd.print("WiFi: OFF");
-    // Показываем время до следующего обновления
+    // Show time until next update
     unsigned long timeUntilUpdate = SCHEDULE_UPDATE_INTERVAL - (currentMillis - lastScheduleUpdate);
     lcd.setCursor(120, 125);
     lcd.setTextColor(ST77XX_CYAN);
@@ -66,7 +66,7 @@ void displaySchedule(String scheduleData, unsigned long currentMillis, unsigned 
   }
 }
 
-// Отображение сообщения о подключении WiFi
+// Display WiFi connection message
 void displayWiFiConnecting() {
   lcd.fillScreen(ST77XX_BLACK);
   lcd.setTextSize(1);
@@ -77,7 +77,7 @@ void displayWiFiConnecting() {
   lcd.print("\nConnecting...\n");
 }
 
-// Отображение инструкций для первоначальной настройки (когда запущен портал)
+// Display instructions for initial setup (when portal is running)
 void displaySetupPortal() {
   lcd.fillScreen(ST77XX_BLACK);
   lcd.setTextSize(1);
@@ -94,7 +94,7 @@ void displaySetupPortal() {
   lcd.print("192.168.4.1");
 }
 
-// Отображение успешного подключения WiFi
+// Display successful WiFi connection
 void displayWiFiConnected() {
   lcd.fillScreen(ST77XX_BLACK);
   lcd.setTextColor(ST77XX_GREEN);
@@ -105,7 +105,7 @@ void displayWiFiConnected() {
   lcd.print(WiFi.localIP());
 }
 
-// Отображение ошибки подключения WiFi
+// Display WiFi connection error
 void displayWiFiError() {
   lcd.fillScreen(ST77XX_BLACK);
   lcd.setTextColor(ST77XX_RED);

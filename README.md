@@ -1,30 +1,30 @@
 # ESP32 Bus Schedule Display
 
-ESP32 проект для отображения расписания автобусов на ST7789 дисплее.
+ESP32 project for displaying bus schedules on ST7789 display.
 
-## Возможности
+## Features
 
-- 📡 Автоматическое подключение к WiFi через WiFiManager
-- 🌐 Веб-интерфейс для управления устройством
-- 🔄 Автоматическое обновление расписания с сервера
-- 📱 Captive portal для первоначальной настройки WiFi
-- 🖥️ Горизонтальная ориентация экрана 240x135
+- 📡 Automatic WiFi connection via WiFiManager
+- 🌐 Web interface for device management
+- 🔄 Automatic schedule updates from server
+- 📱 Captive portal for initial WiFi setup
+- 🖥️ Horizontal screen orientation 240x135
 
-## Требования
+## Requirements
 
-### Библиотеки Arduino:
+### Arduino Libraries:
 - Adafruit GFX Library
 - Adafruit ST7789 Library
-- WiFiManager (для ESP32)
+- WiFiManager (for ESP32)
 - ArduinoJson
-- HTTPClient (встроенная в ESP32)
+- HTTPClient (built-in for ESP32)
 
-### Оборудование:
+### Hardware:
 - ESP32
-- ST7789 TFT дисплей (240x135 или 135x240)
-- Соединительные провода
+- ST7789 TFT display (240x135 or 135x240)
+- Connecting wires
 
-## Подключение дисплея
+## Display Connection
 
 ```
 ESP32    ->  ST7789
@@ -33,39 +33,39 @@ D18      ->  SCLK
 D15      ->  CS
 D2       ->  DC
 D4       ->  RST
-D32      ->  BLK (опционально)
+D32      ->  BLK (optional)
 ```
 
-## Настройка
+## Setup
 
-1. Установите необходимые библиотеки через Arduino IDE Library Manager
-2. Откройте `esp32-bus-schedule.ino` в Arduino IDE
-3. В файле `config.h` укажите URL вашего API сервера:
+1. Install required libraries via Arduino IDE Library Manager
+2. Open `esp32-bus-schedule.ino` in Arduino IDE
+3. In `config.h` file, specify your API server URL:
    ```cpp
    #define SCHEDULE_SERVER_URL "https://your-api-server.com/api/schedule"
    ```
-4. Загрузите код на ESP32
+4. Upload code to ESP32
 
-## Первоначальная настройка WiFi
+## Initial WiFi Setup
 
-1. При первом запуске устройство создаст точку доступа `BusSchedule_Setup`
-2. Подключитесь к этой сети с телефона/компьютера
-3. Откройте браузер и перейдите на `192.168.4.1`
-4. Выберите вашу WiFi сеть и введите пароль
-5. Устройство автоматически подключится к сети
+1. On first boot, device will create access point `BusSchedule_Setup`
+2. Connect to this network from phone/computer
+3. Open browser and navigate to `192.168.4.1`
+4. Select your WiFi network and enter password
+5. Device will automatically connect to network
 
-## Веб-интерфейс
+## Web Interface
 
-После подключения к WiFi, откройте IP-адрес устройства в браузере (отображается на экране).
+After connecting to WiFi, open device IP address in browser (displayed on screen).
 
-Доступные страницы:
-- `/` - Главная страница с информацией
-- `/config` - Настройка WiFi
-- `/reset` - Сброс настроек WiFi
+Available pages:
+- `/` - Main page with information
+- `/config` - WiFi configuration
+- `/reset` - Reset WiFi settings
 
-## Формат API
+## API Format
 
-Сервер должен возвращать JSON в следующем формате:
+Server should return JSON in the following format:
 
 ```json
 {
@@ -76,20 +76,19 @@ D32      ->  BLK (опционально)
 }
 ```
 
-## Структура проекта
+## Project Structure
 
 ```
 esp32-bus-schedule/
-├── esp32-bus-schedule.ino  # Главный файл
-├── config.h                 # Конфигурация
-├── display_utils.h          # Функции работы с дисплеем
-├── wifi_utils.h            # Функции работы с WiFi
-├── schedule_utils.h        # Функции работы с расписанием
-├── web_server.h            # Веб-сервер для управления
-└── README.md               # Этот файл
+├── esp32-bus-schedule.ino  # Main file
+├── config.h                 # Configuration
+├── display_utils.h          # Display functions
+├── wifi_utils.h            # WiFi functions
+├── schedule_utils.h        # Schedule functions
+├── web_server.h            # Web server for management
+└── README.md               # This file
 ```
 
-## Лицензия
+## License
 
 MIT
-

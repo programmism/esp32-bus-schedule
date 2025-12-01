@@ -10,27 +10,27 @@
 #include "schedule_utils.h"
 #include "web_server.h"
 
-// Глобальные объекты
+// Global objects
 Adafruit_ST7789 lcd = Adafruit_ST7789(LCD_CS, LCD_DC, LCD_RST);
 WiFiManager wifiManager;
 WebServer server(80);
 
-// Переменные состояния
+// State variables
 unsigned long lastWiFiCheck = 0;
 unsigned long lastScheduleUpdate = 0;
-String scheduleData = "Loading..."; // Хранит последнее полученное расписание
+String scheduleData = "Loading..."; // Stores the last received schedule
 
 void setup() {
-  // Инициализация дисплея
+  // Initialize display
   initDisplay();
   
-  // Подключение к WiFi через WiFiManager
+  // Connect to WiFi via WiFiManager
   connectToWiFi();
   
-  // Первый запрос расписания
+  // First schedule request
   if (WiFi.status() == WL_CONNECTED) {
     scheduleData = updateSchedule();
-    // Инициализация веб-сервера для управления
+    // Initialize web server for management
     initWebServer();
   }
 }
@@ -38,24 +38,24 @@ void setup() {
 void loop() {
   unsigned long currentMillis = millis();
   
-  // Обработка запросов веб-сервера (если подключены к WiFi)
+  // Handle web server requests (if connected to WiFi)
   if (WiFi.status() == WL_CONNECTED) {
     server.handleClient();
   }
   
-  // Проверка подключения к WiFi и переподключение при необходимости
+  // Check WiFi connection and reconnect if necessary
   if (currentMillis - lastWiFiCheck >= WIFI_CHECK_INTERVAL) {
     lastWiFiCheck = currentMillis;
     if (WiFi.status() != WL_CONNECTED) {
       connectToWiFi();
-      // Переинициализируем веб-сервер после подключения
+      // Reinitialize web server after connection
       if (WiFi.status() == WL_CONNECTED) {
         initWebServer();
       }
     }
   }
 
-  // Обновление расписания раз в минуту
+  // Update schedule once per minute
   if (currentMillis - lastScheduleUpdate >= SCHEDULE_UPDATE_INTERVAL) {
     lastScheduleUpdate = currentMillis;
     if (WiFi.status() == WL_CONNECTED) {
@@ -65,7 +65,7 @@ void loop() {
     }
   }
 
-  // Отображение расписания на экране
+  // Display schedule on screen
   displaySchedule(scheduleData, currentMillis, lastScheduleUpdate);
   
   delay(1000);
